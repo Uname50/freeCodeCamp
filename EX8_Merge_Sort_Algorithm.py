@@ -10,6 +10,11 @@
 
 # create a function that will perform the sort on a data structure (DS)
 def merge_sort(array):
+
+    # first, check if the array has anything in it, or only has 1 element, which would already be sorted
+    if len(array) <= 1:
+        return
+
     # find the middle point of the DS
     middle_point = len(array) // 2
     
@@ -45,6 +50,25 @@ def merge_sort(array):
             array[sorted_index] = right_part[right_array_index]
             right_array_index += 1
 
-    # an element from the if-else loop will take an index in the sorted list array. move to the next free space for the next loop iteration 
-    sorted_index += 1
+        # an element from the if-else loop will take an index in the sorted list array. move to the next free space for the next loop iteration 
+        sorted_index += 1 
         
+    # the while loop above will continue comparing the elements until there are nothing left to compare. However, either left_part or right_part may still have elements while the other one has none. 
+    # handle this by copying the remaining elements in either part into the DS
+    while left_array_index < len(left_part):
+        array[sorted_index] = left_part[left_array_index]
+        left_array_index += 1 
+        sorted_index += 1
+
+    # same logic for the right_part 
+    while right_array_index < len(right_part):
+        array[sorted_index] = right_part[right_array_index] 
+        right_array_index += 1
+        sorted_index += 1
+
+if __name__ == '__main__':
+    numbers = [4, 10, 6, 14, 2, 1, 8, 5]
+    print('Unsorted array: ')
+    print(numbers)
+    merge_sort(numbers)
+    print('Sorted array: ' + str(numbers))
