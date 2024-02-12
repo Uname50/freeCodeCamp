@@ -57,3 +57,50 @@ class Board:
                 
                 # in order to create a visually appealing border, append a different border string to board_string 
                 board_string += f'╠═══{"╪═══"*2}{"╬═══"}{"╪═══"*2}{"╬═══"}{"╪═══"*2}╣\n'
+            
+            # if the inner condition is False, the current row is not the last row of a 3x3 square 
+            else:
+                board_string += middle_lines
+
+        # handle the last row of the entire board 
+        else: 
+            board_string += lower_lines
+    
+        # after the outer loop completes for all rows, return the string that contains the complete visual representation of the sudoku board
+        return board_string
+    
+    # method that finds the empty cells in the sudoku board
+    def find_empty_cell(self):
+        for row, contents in enumerate(self.board):
+            
+            # attempt to find the index of the first occurrence of 0 in the current row
+            try:
+                col = contents.index(0)
+                return row, col
+            except ValueError:
+                pass
+
+        # if the loop completes without finding any empty cells, the method should return None to indicate that the sudoku board is filled
+        return None
+    
+    # method that checks if a given number can be inserted into a specified row of the sudoku board
+    # self: representing the instance of the class
+    # row: row index
+    # num: the number to be checked 
+    def valid_in_row(self, row, num):
+        
+        # check if the number is not already present in that row
+        return num not in self.board[row]
+    
+    # method that checks if a number can be inserted in a specified column of the sudoku board by checking if the number is not already present in that column for any row 
+    def valid_in_col(self, col, num):
+
+        # generate a list of boolean values representing whether the condition is True for each element in the specified column across all rows
+        return all(
+            
+            # for each element in the specified column (col) of the current row (row), check whether the value at the current position in the 2D list is not equal to the provided num
+            self.board[row][col] != num
+
+            # check if a given number is not equal to the number in the specified column of the current row
+            for row in range(9)
+        )
