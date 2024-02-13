@@ -40,31 +40,31 @@ class Board:
                 if square_no != 3:
                     row_list.append('║')
 
-        # create a string representation of the row with spaces between each element
-        row = f'║ {" ".join(row_list)} ║\n' 
+            # create a string representation of the row with spaces between each element
+            row = f'║ {" ".join(row_list)} ║\n'
 
-        # replace the 0 that will be used for empty cells with a space
-        row_empty = row.replace('0', ' ')
+            # replace the 0 that will be used for empty cells with a space
+            row_empty = row.replace('0', ' ')
 
-        # board_string is gradually built up as the loop iterates over each row, creating the full ASCII art representation of the sudoku board
-        board_string += row_empty
+            # board_string is gradually built up as the loop iterates over each row, creating the full ASCII art representation of the sudoku board
+            board_string += row_empty
 
-        # check if the row index is 8, as it will be handled differently:
-        if index < 8:
-            
-            # verify if the row is the last row inside a 3x3 square
-            if index % 3 == 2:
+            # check if the row index is 8, as it will be handled differently:
+            if index < 8:
                 
-                # in order to create a visually appealing border, append a different border string to board_string 
-                board_string += f'╠═══{"╪═══"*2}{"╬═══"}{"╪═══"*2}{"╬═══"}{"╪═══"*2}╣\n'
+                # verify if the row is the last row inside a 3x3 square
+                if index % 3 == 2:
+                
+                    # in order to create a visually appealing border, append a different border string to board_string 
+                    board_string += f'╠═══{"╪═══"*2}{"╬═══"}{"╪═══"*2}{"╬═══"}{"╪═══"*2}╣\n'
             
-            # if the inner condition is False, the current row is not the last row of a 3x3 square 
-            else:
-                board_string += middle_lines
+                # if the inner condition is False, the current row is not the last row of a 3x3 square 
+                else:
+                    board_string += middle_lines
 
-        # handle the last row of the entire board 
-        else: 
-            board_string += lower_lines
+            # handle the last row of the entire board 
+            else:
+                board_string += lower_lines
     
         # after the outer loop completes for all rows, return the string that contains the complete visual representation of the sudoku board
         return board_string
@@ -168,7 +168,7 @@ class Board:
                     self.board[row][col] = guess 
 
                     # recursively call self.solver() to try to solve the rest of the sudoku
-                    self.solver()
+                    #self.solver()
 
                     # if the recursive call to self.solver() returns True, it means the sudoku is solved
                     if self.solver():
