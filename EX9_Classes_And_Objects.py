@@ -104,3 +104,114 @@ class Board:
             # check if a given number is not equal to the number in the specified column of the current row
             for row in range(9)
         )
+    
+    # check if a number can be inserted in the 3x3 square
+    # row: row index 
+    # col: column index 
+    # num: number to be checked
+    def valid_in_square(self, row, col, num):
+        
+        # calculate the starting row index for the 3x3 block in the board grid
+        row_start = (row // 3) * 3
+
+        # calculate the starting column index for the 3x3 block in the board grid
+        col_start = (col // 3) * 3
+
+        for row_no in range(row_start, row_start + 3):
+            for col_no in range(col_start, col_start + 3):
+                if self.board[row_no][col_no] == num:
+                    return False
+        
+        # if the number is not present, it can be inserted into the square without violating the rules of sudoku
+        return True
+    
+    # check if a given number is a valid choice for an empty cell in the sudoku board by validating its compatibility with the row, column, and 3x3 square of the specified empty cell
+    # empty: a tuple representing the row and column indices of an empty cell 
+    # num: number to be checked
+    def is_valid(self, empty, num):
+
+        # unpack the "empty" tulip inro the row and column values
+        row, col = empty 
+
+        # check if the number is valid for insertion in the specified row
+        valid_in_row = self.valid_in_row(row, num)
+
+        # check if the number is valid for insertion in the specified column 
+        valid_in_col = self.valid_in_col(col, num)
+
+        # check if the number is valid for insertion in the 3x3 square that contains the specified cell
+        valid_in_square = self.valid_in_square(row, col, num)
+
+        # verify that all the function calls return True and return the result
+        return all([valid_in_row, valid_in_col, valid_in_square])
+    
+    # method that attempts to solve the sudoku in-place (modify the existing sudoku board rather than creating a new one)
+    def solver(self):
+        
+        # check if there are any empty cells left in the sudoku board. By using the walrus operator (:=), combine the assignment and the conditional check into a single line, making the code more concise and readable
+        if (next_empty := self.find_empty_cell()) is None:
+
+            # if there are no empty cells (i.e., next_empty is None), the puzzle is solved. So, return True
+            return True
+        
+        # the case where there are empty cells and the puzzle is unsolved
+        else: 
+            for guess in range(1, 10):
+
+                # for each number (guess), check if the number is a valid choice for the current empty cell
+                if self.is_valid(next_empty, guess):
+
+                    # if the guess is valid, the method updates the sudoku board with the guess by assigning guess to the cell specified by "next_empty"
+                    row, col = next_empty
+
+                    # access the cell at the given row and column in the sudoku board
+                    self.board[row][col] = guess 
+
+                    # recursively call self.solver() to try to solve the rest of the sudoku
+                    self.solver()
+
+                    # if the recursive call to self.solver() returns True, it means the sudoku is solved
+                    if self.solver():
+                        return True
+            
+                    # if self.solver() returns False, this means the "guess" led to an unsolvable sudoku. So, reset the guess to 0
+                    self.board[row][col] = 0
+
+            # return False when none of the guesses leads to a solution 
+            return False
+        
+# function to print and solve the sudoku board
+def solve_sudoku(board):
+
+    # create a board
+    gameboard = Board(board)
+
+    # print the board
+    print(f'\nPuzzle to solve:\n{gameboard}')
+
+    # check if the solver() method call from the gameboard object returns True. If so, pring the solved puzzle
+    if gameboard.solver():
+        print('\nSolved puzzle:')
+        print(gameboard)
+
+    # print the message if the puzzle is unsolvable
+    else:
+        print('\nThe provided puzzle is unsolvable.')
+
+    # return teh instance of the Board class, which represents the final state of the sudoku board after attempting to solve it
+    return gameboard 
+
+# test run: 
+puzzle = [
+  [0, 0, 2, 0, 0, 8, 0, 0, 0],
+  [0, 0, 0, 0, 0, 3, 7, 6, 2],
+  [4, 3, 0, 0, 0, 0, 8, 0, 0],
+  [0, 5, 0, 0, 3, 0, 0, 9, 0],
+  [0, 4, 0, 0, 0, 0, 0, 2, 6],
+  [0, 0, 0, 4, 6, 7, 0, 0, 0],
+  [0, 8, 6, 7, 0, 4, 0, 0, 0],
+  [0, 0, 0, 5, 1, 9, 0, 0, 8],
+  [1, 7, 0, 0, 0, 6, 0, 0, 5]
+]
+
+solve_sudoku(puzzle)
