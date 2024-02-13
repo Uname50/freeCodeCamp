@@ -167,9 +167,6 @@ class Board:
                     # access the cell at the given row and column in the sudoku board
                     self.board[row][col] = guess 
 
-                    # recursively call self.solver() to try to solve the rest of the sudoku
-                    #self.solver()
-
                     # if the recursive call to self.solver() returns True, it means the sudoku is solved
                     if self.solver():
                         return True
