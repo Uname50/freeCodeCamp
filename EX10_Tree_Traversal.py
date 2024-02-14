@@ -10,6 +10,9 @@ class TreeNode:
         self.right = None
         self.left = None
 
+    def __str__(self):
+        return str(self.key)
+
 class BinarySearchTree:
     def __init__(self) -> None:
         
@@ -127,3 +130,17 @@ class BinarySearchTree:
 
             # append the key of the current node to the result list
             result.append(node.key)
+
+            # explore the entire right subtree in an in-order manner 
+            self._inorder_traversal(node.right, result)
+
+# test run
+bst = BinarySearchTree()
+nodes = [50, 30, 20, 40, 70, 60, 80]
+for node in nodes:
+    bst.insert(node)
+print('Inorder traversal:', bst.inorder_traversal())
+print('Search for 40:', bst.search(40))
+bst.delete(40)
+print("Inorder traversal after deleting 40:", bst.inorder_traversal())
+print("Search for 40:", bst.search(40))
