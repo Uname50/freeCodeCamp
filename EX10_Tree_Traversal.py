@@ -87,4 +87,43 @@ class BinarySearchTree:
             elif node.right is None:
                 return node.left
             
-            
+            # if neither condition is met, the node has both children. To choose a successor, find the min value to the right subtree, which will be the in-order successor of the current node 
+            node.key = self._min_value(node.right)
+
+            # after finding the minimum value, you will need to recursively delete the node with the minimum value from the right subtree. This step ensures that the node with the minimum value is removed from the tree while maintaining the binary search tree (BST) property
+            node.right = self._delete(node.right, node.key)
+
+        # return the current node
+        return node
+    
+    def _min_value(self, node):
+
+        # to find the smallest value in the right subtree, iterate through the left children of the given node until reaching the leftmost (smallest) node in the subtree
+        while node.left is not None:
+            self.node = node.left
+        
+        # once the leftmost node is found (that is, when node.left becomes None), the loop exits. Return the key of the leftmost node, which represents the minimum value in the given subtree
+        return node.key
+    
+    # method for performing an in-order traversal of the binary search tree. It returns the keys of the nodes in sorted order
+    def inorder_traversal(self):
+
+        # list to store the keys of the nodes in sorted order
+        result = []
+
+        # start the traversal from the root of the binary search tree (self.root), and the result list will be passed to accumulate the keys during the traversal
+        self._inorder_traversal(self.root, result)
+
+        # return the sorted list of keys
+        return result
+    
+    # node: current node being considered during the traversal
+    # result: list to which the keys are appended in sorted order
+    def _inorder_traversal(self, node, result):
+        
+        # check if the current node (node) is not empty
+        if node: 
+            self._inorder_traversal(node.left, result)
+
+            # append the key of the current node to the result list
+            result.append(node.key)
